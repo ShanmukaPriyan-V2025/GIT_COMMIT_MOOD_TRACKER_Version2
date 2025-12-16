@@ -1,0 +1,33 @@
+{
+  "name": "git-commit-mood-tracker",
+  "displayName": "Git Commit Mood Tracker",
+  "description": "Analyze Git commit messages to determine developer mood using AI",
+  "version": "0.0.1",
+  "publisher": "gitmoodtracker",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Source Control", "Visualization"],
+  "activationEvents": [
+    "onCommand:gitCommitMoodTracker.analyzeCommits"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitCommitMoodTracker.analyzeCommits",
+        "title": "Git Commit Mood Tracker: Analyze Commits"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "@types/vscode": "^1.85.0"
+  }
+}

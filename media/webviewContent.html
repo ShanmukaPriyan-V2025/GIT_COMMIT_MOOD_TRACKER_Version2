@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Git Commit Mood Tracker</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #101010;
+      color: #eaeaea;
+    }
+
+    h2, h3 {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    /* ===== SUMMARY BARS ===== */
+    .bar {
+      height: 34px;
+      margin: 12px 0;
+      background: #2b2b2b;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+    }
+
+    .bar-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: bold;
+      font-size: 14px;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .positive { background: #2ecc71; }
+    .neutral  { background: #f39c12; }
+    .negative { background: #e74c3c; }
+
+    /* ===== COMMIT LIST ===== */
+    .commit {
+      background: #1c1c1c;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border-left: 5px solid transparent;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .commit.positive { border-left-color: #2ecc71; }
+    .commit.neutral  { border-left-color: #f39c12; }
+    .commit.negative { border-left-color: #e74c3c; }
+
+    .commit-header {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .commit-header span {
+      opacity: 0.85;
+      font-size: 13px;
+    }
+
+    .commit-message {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #dddddd;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Commit Mood Summary</h2>
+<div id="chart"></div>
+
+<h3>Commit Details</h3>
+<div id="list"></div>
+
+<!-- DATA_PLACEHOLDER -->
+
+<script>
+  try {
+    const raw = document.getElementById("data-json").textContent;
+    const data = JSON.parse(raw);
+
+    const summary = data.summary;
+    const commits = data.commits;
+
+    const total =
+      summary.Positive + summary.Neutral + summary.Negative;
+
+    const chart = document.getElementById("chart");
+    const list = document.getElementById("list");
+
+    function createBar(label, count, className) {
+      const percent = total === 0 ? 0 : Math.round((count / total) * 100);
+
+      const bar = document.createElement("div");
+      bar.className = "bar";
+
+      const fill = document.createElement("div");
+      fill.className = "bar-fill " + className;
+      fill.style.width = percent + "%";
+
+      const text = document.createElement("div");
+      text.className = "bar-label";
+      text.textContent = label + ": " + percent + "%";
+
+      bar.appendChild(fill);
+      bar.appendChild(text);
+      chart.appendChild(bar);
+    }
+
+    createBar("Positive", summary.Positive, "positive");
+    createBar("Neutral", summary.Neutral, "neutral");
+    createBar("Negative", summary.Negative, "negative");
+
+    commits.forEach(c => {
+      const container = document.createElement("div");
+      container.className = "commit " + c.mood.toLowerCase();
+
+      const header = document.createElement("div");
+      header.className = "commit-header";
+      header.innerHTML =
+        c.mood +
+        " <span>(" + c.confidence.toFixed(2) + ")</span>";
+
+      const message = document.createElement("div");
+      message.className = "commit-message";
+      message.textContent = c.message;
+
+      container.appendChild(header);
+      container.appendChild(message);
+      list.appendChild(container);
+    });
+
+  } catch (e) {
+    document.body.innerHTML =
+      "<p class='error'>Failed to load commit mood data.</p>";
+    console.error(e);
+  }
+</script>
+
+</body>
+</html>
