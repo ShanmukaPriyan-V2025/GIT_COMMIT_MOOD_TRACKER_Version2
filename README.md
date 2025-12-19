@@ -32,3 +32,4 @@ python --version
 node --version
 ```
 
+![image alt](https://github.com/ShanmukaPriyan-V2025/GIT_COMMIT_MOOD_TRACKER_byteammate/blob/b30935fd549169cb8c5ab02082184abda5eccfb9/WhatsApp%20Image%202025-12-16%20at%2010.20.31%20PM.jpeg)
